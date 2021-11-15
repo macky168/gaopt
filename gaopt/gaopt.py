@@ -21,8 +21,8 @@ Hyper-parameters need to be explained:
     - p_m [float]: mutation rate (default: 0.1=10%)
     - p_c [float]: crossover rate (default: 0.7=70%)
     - elitism: use elitism or not (default: True) 
-    - rate_of_roulette_wheel_selection_at_crossover: roulette wheel selection or ranking selection (default: 0.0 =all ranking selection), 
-    - rate_of_roulette_wheel_selection_at_copy_parent: roulette wheel selection or ranking selection (default: 0.0 =all ranking selection),
+    - rate_of_roulette_wheel_selection_at_crossover: roulette wheel selection or ranking selection (default: 0.0 = all ranking selection), 
+    - rate_of_roulette_wheel_selection_at_copy_parent: roulette wheel selection or ranking selection (default: 0.0 = all ranking selection),
     - early_stopping [True or False]: whether you use early_stopping or not (default: False)
         - if no improve of best_fitness and mean_fitness, terminate.
     - maximizing [True or False]: maximizing or minimizing problem 
@@ -55,6 +55,7 @@ Hiroya MAKINO
 Grad. School of Informatics, Nagoya University
 
 ver1.0, Apr. 30 2021
+ver1.1, Nov. 15 2021 | error fixed in minimizing problem and fixing random-seed
 """
 
 
@@ -66,7 +67,7 @@ class GAOpt:
     
     def __init__(
             self, 
-            params, objective, generation=50, population=100,
+            params, objective, generation=30, population=100,
             p_m=0.10, p_c=0.7, elitism=True, rate_of_roulette_wheel_selection_at_crossover=0.0, rate_of_roulette_wheel_selection_at_copy_parent=0.0,
             early_stopping=False, maximizing=True, preserving_calc=True, 
             history=0, verbose=0, seed=168):
@@ -287,10 +288,7 @@ class GAOpt:
             # ---------------------
             # elitism: preserve the best individual
             # ---------------------
-            if self.maximizing:
-                best_index = current_fitness_lst.index(max(current_fitness_lst))
-            else:
-                best_index = current_fitness_lst.index(min(current_fitness_lst))
+            best_index = current_fitness_lst.index(max(current_fitness_lst))
             
             if self.elitism:
                 for k in range(self.population):
